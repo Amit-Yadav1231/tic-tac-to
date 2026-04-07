@@ -1,0 +1,246 @@
+/* ═══════════════════════════════════════════
+   style.css  –  Tic Tac Toe
+   Theme: Warm cream + inky navy + coral accent
+   ═══════════════════════════════════════════ */
+
+/* ── CSS Variables (design tokens) ── */
+:root {
+  --bg:          #f5f0e8;          /* warm cream background */
+  --card:        #fffdf7;          /* slightly lighter card */
+  --navy:        #1a1a2e;          /* deep navy for text */
+  --coral:       #e8533a;          /* coral accent (X) */
+  --teal:        #2a7f6f;          /* teal accent (O) */
+  --border:      #d4c9b0;          /* soft warm border */
+  --shadow:      rgba(26,26,46,.12);
+  --radius:      18px;
+  --cell-size:   110px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-mono:    'DM Mono', 'Courier New', monospace;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Decorative background circles ── */
+.bg-circle {
+  position: fixed;
+  border-radius: 50%;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.c1 {
+  width: 520px; height: 520px;
+  background: var(--coral);
+  top: -160px; left: -180px;
+}
+.c2 {
+  width: 380px; height: 380px;
+  background: var(--teal);
+  bottom: -120px; right: -100px;
+}
+.c3 {
+  width: 200px; height: 200px;
+  background: var(--navy);
+  top: 60%; left: 10%;
+}
+
+/* ── Card ── */
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px 44px 36px;
+  box-shadow: 0 12px 48px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 1;
+  animation: slideUp .5s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Title ── */
+.title {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--navy);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.title .accent { color: var(--coral); }
+
+/* ── Status bar ── */
+.status-bar {
+  background: var(--navy);
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 24px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  min-width: 220px;
+  text-align: center;
+  transition: background .3s;
+}
+.status-bar.win  { background: var(--teal); }
+.status-bar.draw { background: #7a6a4f; }
+
+/* ── Player indicators ── */
+.player-indicators {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: border-color .25s, transform .25s;
+}
+.indicator.active {
+  border-color: var(--border);
+  transform: scale(1.06);
+  background: rgba(0,0,0,.03);
+}
+
+.mark {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+}
+.x-mark { color: var(--coral); }
+.o-mark { color: var(--teal); }
+
+.player-label {
+  font-size: 0.7rem;
+  color: #888;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vs {
+  font-size: 0.75rem;
+  color: #bbb;
+  font-style: italic;
+}
+
+/* ── Game Board ── */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, var(--cell-size));
+  grid-template-rows:    repeat(3, var(--cell-size));
+  gap: 10px;
+}
+
+/* ── Individual Cell ── */
+.cell {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: background .18s, transform .18s, border-color .18s;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.cell:hover:not(.taken) {
+  background: #ece5d3;
+  border-color: #bfae90;
+  transform: scale(1.04);
+}
+
+/* When a cell is filled → not interactive */
+.cell.taken { cursor: default; }
+
+/* X mark inside cell */
+.cell.x {
+  color: var(--coral);
+  border-color: rgba(232,83,58,.3);
+  background: rgba(232,83,58,.06);
+}
+
+/* O mark inside cell */
+.cell.o {
+  color: var(--teal);
+  border-color: rgba(42,127,111,.3);
+  background: rgba(42,127,111,.06);
+}
+
+/* Pop-in animation when a mark is placed */
+.cell.pop {
+  animation: pop .25s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes pop {
+  from { transform: scale(.6); opacity: .4; }
+  to   { transform: scale(1);  opacity: 1;  }
+}
+
+/* Winning cells glow */
+.cell.winner-cell {
+  background: rgba(255, 214, 0, .22) !important;
+  border-color: #f5c400 !important;
+  animation: glow .6s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { box-shadow: 0 0 6px rgba(245,196,0,.4); }
+  to   { box-shadow: 0 0 20px rgba(245,196,0,.8); }
+}
+
+/* ── Reset Button ── */
+.reset-btn {
+  margin-top: 4px;
+  padding: 13px 40px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.reset-btn:hover {
+  background: var(--coral);
+  transform: translateY(-2px);
+}
+.reset-btn:active { transform: translateY(0); }
+
+/* ── Responsive: smaller screens ── */
+@media (max-width: 500px) {
+  :root { --cell-size: 88px; }
+  .card { padding: 28px 20px; }
+  .title { font-size: 2rem; }
+}
