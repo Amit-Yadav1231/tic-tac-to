@@ -4,10 +4,12 @@ app.py - Flask Backend for Tic Tac Toe
 Run this file to start the web server.
 """
 
-from flask import Flask, jsonify, render_template, request
+import os
+from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 
 # Initialize the Flask application
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "tic-tac-toe-secret-key-2024")  # Required for session support
 
 # ─────────────────────────────────────────────
 # Game State (stored in memory on the server)
@@ -62,12 +64,45 @@ def check_draw(board):
 
 
 # ─────────────────────────────────────────────
-# Route: Serve the HTML page
+# Route: Home Page (Landing)
 # ─────────────────────────────────────────────
 @app.route("/")
-def index():
+def home():
+    """Serves the home / landing page."""
+    return render_template("home.html")
+
+
+# ─────────────────────────────────────────────
+# Route: Save Player Info
+# ─────────────────────────────────────────────
+@app.route("/set-name", methods=["POST"])
+def set_name():
+    """Stores the player info in the session and redirects to mode selection."""
+    name = request.form.get("player_name", "").strip()
+    email = request.form.get("player_email", "").strip()
+    session["player_name"] = name if name else "Player"
+    session["player_email"] = email
+    return redirect(url_for("mode"))
+
+
+# ─────────────────────────────────────────────
+# Route: Mode Selection Page
+# ─────────────────────────────────────────────
+@app.route("/mode")
+def mode():
+    """Serves the mode selection page."""
+    player_name = session.get("player_name", "Player")
+    return render_template("mode.html", player_name=player_name)
+
+
+# ─────────────────────────────────────────────
+# Route: Serve the Game Board
+# ─────────────────────────────────────────────
+@app.route("/game")
+def game():
     """Serves the main game page."""
-    return render_template("index.html")
+    player_name = session.get("player_name", "Player")
+    return render_template("index.html", player_name=player_name)
 
 
 # ─────────────────────────────────────────────
@@ -149,4 +184,4 @@ def make_move():
 # ─────────────────────────────────────────────
 if __name__ == "__main__":
     # debug=True enables auto-reload when you edit the code
-    app.run(debug=True)
+   app.run(host="0.0.0.0", port=5000)

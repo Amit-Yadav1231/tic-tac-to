@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Tic Tac Toe — Welcome</title>
+  <meta name="description" content="Play Tic Tac Toe online against AI or a friend. Enter your name and start playing!">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- Background blobs -->
+  <div class="bg-circle c1"></div>
+  <div class="bg-circle c2"></div>
+  <div class="bg-circle c3"></div>
+
+  <!-- Decorative Game Board (background) -->
+  <div class="deco-board" aria-hidden="true">
+    <div class="deco-cell x">X</div>
+    <div class="deco-cell o">O</div>
+    <div class="deco-cell x">X</div>
+    <div class="deco-cell"></div>
+    <div class="deco-cell x">X</div>
+    <div class="deco-cell o">O</div>
+    <div class="deco-cell o">O</div>
+    <div class="deco-cell"></div>
+    <div class="deco-cell x">X</div>
+  </div>
+
+  <!-- Home Card -->
+  <main class="card home-card" id="home-card">
+
+    <!-- Animated icon -->
+    <div class="home-icon">
+      <span class="home-x">X</span>
+      <span class="home-o">O</span>
+    </div>
+
+    <h1 class="title">Tic <span class="accent">Tac</span> Toe</h1>
+    <p class="subtitle">Challenge your friends or battle the AI</p>
+
+    <form action="/set-name" method="POST" class="home-form" id="home-form">
+      <div class="input-group">
+        <input
+          type="text"
+          name="player_name"
+          id="player-name"
+          placeholder="Enter your name…"
+          maxlength="20"
+          autocomplete="off"
+          required
+        />
+        <span class="input-icon">✏️</span>
+      </div>
+      <div class="input-group">
+        <input
+          type="email"
+          name="player_email"
+          id="player-email"
+          placeholder="Enter your email…"
+          autocomplete="off"
+          required
+        />
+        <span class="input-icon">📧</span>
+      </div>
+      <button type="submit" class="btn-primary" id="start-btn">
+        Start Game
+        <span class="btn-arrow">→</span>
+      </button>
+    </form>
+
+  </main>
+
+</body>
+</html>

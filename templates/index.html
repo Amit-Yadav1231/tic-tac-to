@@ -2,72 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Tic Tac Toe</title>
 
-  <!-- Google Fonts: Playfair Display for headings, DM Mono for board -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Our stylesheet -->
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
 
-  <!-- ── Background decorative circles ── -->
+  <!-- Background blobs -->
   <div class="bg-circle c1"></div>
   <div class="bg-circle c2"></div>
   <div class="bg-circle c3"></div>
 
-  <!-- ── Main Card ── -->
-  <main class="card">
+  <!-- Game Layout: Board + Chat side by side -->
+  <div class="game-layout">
 
-    <!-- Title -->
-    <h1 class="title">Tic <span class="accent">Tac</span> Toe</h1>
+    <!-- Game Board Card -->
+    <main class="card">
 
-    <!-- Status bar: whose turn / winner / draw -->
-    <div class="status-bar">
-      <span id="status-text">Loading game…</span>
-    </div>
+      <h1 class="title">Tic <span class="accent">Tac</span> Toe</h1>
 
-    <!-- Player indicators -->
-    <div class="player-indicators">
-      <div class="indicator" id="indicator-X">
-        <span class="mark x-mark">X</span>
-        <span class="player-label">Player X</span>
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span id="status-text">Loading game…</span>
       </div>
-      <div class="vs">vs</div>
-      <div class="indicator" id="indicator-O">
-        <span class="mark o-mark">O</span>
-        <span class="player-label">Player O</span>
+
+      <!-- Player indicators -->
+      <div class="player-indicators">
+        <div class="indicator" id="indicator-X">
+          <span class="mark x-mark">X</span>
+          <span class="player-label">Player X</span>
+        </div>
+        <div class="vs">vs</div>
+        <div class="indicator" id="indicator-O">
+          <span class="mark o-mark">O</span>
+          <span class="player-label">Player O</span>
+        </div>
       </div>
-    </div>
 
-    <!-- 3×3 Game Board -->
-    <div class="board" id="board">
-      <!--
-        9 cells generated here.
-        Each has data-row and data-col attributes so JS knows which cell was clicked.
-      -->
-      <div class="cell" data-row="0" data-col="0"></div>
-      <div class="cell" data-row="0" data-col="1"></div>
-      <div class="cell" data-row="0" data-col="2"></div>
+      <!-- 3×3 Game Board (fluid grid) -->
+      <div class="board" id="board">
+        <div class="cell" data-row="0" data-col="0"></div>
+        <div class="cell" data-row="0" data-col="1"></div>
+        <div class="cell" data-row="0" data-col="2"></div>
+        <div class="cell" data-row="1" data-col="0"></div>
+        <div class="cell" data-row="1" data-col="1"></div>
+        <div class="cell" data-row="1" data-col="2"></div>
+        <div class="cell" data-row="2" data-col="0"></div>
+        <div class="cell" data-row="2" data-col="1"></div>
+        <div class="cell" data-row="2" data-col="2"></div>
+      </div>
 
-      <div class="cell" data-row="1" data-col="0"></div>
-      <div class="cell" data-row="1" data-col="1"></div>
-      <div class="cell" data-row="1" data-col="2"></div>
+      <!-- Reset Button -->
+      <button class="reset-btn" id="reset-btn">New Game</button>
 
-      <div class="cell" data-row="2" data-col="0"></div>
-      <div class="cell" data-row="2" data-col="1"></div>
-      <div class="cell" data-row="2" data-col="2"></div>
-    </div>
+    </main>
 
-    <!-- Reset Button -->
-    <button class="reset-btn" id="reset-btn">New Game</button>
+    <!-- Chat Panel -->
+    <aside class="chat-panel" id="chat-panel">
+      <div class="chat-header">
+        <span class="chat-header-icon">💬</span>
+        Game Chat
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Type a message…" maxlength="120" autocomplete="off" />
+        <button class="chat-send-btn" id="chat-send-btn">Send</button>
+      </div>
+    </aside>
 
-  </main>
+  </div>
 
-  <!-- Our JavaScript (loaded at the end so the DOM is ready) -->
+  <!-- Mobile Chat Toggle FAB -->
+  <button class="chat-toggle-btn" id="chat-toggle-btn" aria-label="Toggle chat">
+    💬
+  </button>
+
+  <!-- JavaScript -->
   <script src="/static/script.js"></script>
 </body>
 </html>

@@ -191,3 +191,141 @@ resetBtn.addEventListener("click", startGame);
 // Initialise: start a fresh game when page loads
 // ─────────────────────────────────────────────
 startGame();
+
+
+// ─────────────────────────────────────────────
+// Chat Panel
+// ─────────────────────────────────────────────
+const chatMessages = document.getElementById("chat-messages");
+const chatInput    = document.getElementById("chat-input");
+const chatSendBtn  = document.getElementById("chat-send-btn");
+
+// Track which player is "chatting" (toggles based on current game turn)
+let chatPlayer = "X";
+
+/**
+ * Add a message to the chat panel.
+ * @param {string} text - The message text
+ * @param {"system"|"player-x"|"player-o"} type - Message type for styling
+ * @param {string} [sender] - Optional sender label
+ */
+function addChatMessage(text, type, sender) {
+  const msg = document.createElement("div");
+  msg.className = `chat-msg ${type}`;
+
+  if (sender) {
+    const senderSpan = document.createElement("span");
+    senderSpan.className = "msg-sender";
+    senderSpan.textContent = sender;
+    msg.appendChild(senderSpan);
+  }
+
+  const textNode = document.createTextNode(text);
+  msg.appendChild(textNode);
+  chatMessages.appendChild(msg);
+
+  // Auto-scroll to bottom
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Initial welcome message
+addChatMessage("Game started! Good luck 🎮", "system");
+
+// Send button click
+chatSendBtn.addEventListener("click", sendChat);
+
+// Enter key to send
+chatInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendChat();
+});
+
+function sendChat() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  const playerClass = `player-${chatPlayer.toLowerCase()}`;
+  addChatMessage(text, playerClass, `Player ${chatPlayer}`);
+  chatInput.value = "";
+}
+
+// ─────────────────────────────────────────────
+// Patch: Auto-log moves and results to chat
+// ─────────────────────────────────────────────
+
+// Override updateUI to also post chat messages
+const _originalUpdateUI = updateUI;
+updateUI = function(game) {
+  _originalUpdateUI(game);
+
+  // Track the current chatting player
+  chatPlayer = game.current_player || "X";
+};
+
+// Override makeMove to log the move
+const _originalMakeMove = makeMove;
+makeMove = async function(row, col) {
+  // Capture current player BEFORE the move
+  const movingPlayer = chatPlayer;
+
+  await _originalMakeMove(row, col);
+
+  // Check if a mark was placed (cell now has content)
+  const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+  if (cell && cell.textContent) {
+    const positions = [
+      ["top-left", "top-center", "top-right"],
+      ["mid-left", "center", "mid-right"],
+      ["bot-left", "bot-center", "bot-right"]
+    ];
+    const posName = positions[row][col];
+    addChatMessage(
+      `Played ${posName}`,
+      `player-${movingPlayer.toLowerCase()}`,
+      `Player ${movingPlayer}`
+    );
+
+    // Check for win/draw from the status bar
+    const statusEl = document.getElementById("status-text");
+    if (statusEl.textContent.includes("wins")) {
+      addChatMessage(statusEl.textContent, "system");
+    } else if (statusEl.textContent.includes("draw")) {
+      addChatMessage(statusEl.textContent, "system");
+    }
+  }
+};
+
+// Override startGame to log resets
+const _originalStartGame = startGame;
+startGame = async function() {
+  await _originalStartGame();
+  addChatMessage("New game started! 🎲", "system");
+  chatPlayer = "X";
+};
+
+
+// ─────────────────────────────────────────────
+// Mobile Chat Toggle (FAB button)
+// ─────────────────────────────────────────────
+const chatToggleBtn = document.getElementById("chat-toggle-btn");
+const chatPanel     = document.getElementById("chat-panel");
+
+if (chatToggleBtn && chatPanel) {
+  chatToggleBtn.addEventListener("click", () => {
+    const isOpen = chatPanel.classList.toggle("open");
+    chatToggleBtn.textContent = isOpen ? "✕" : "💬";
+
+    // Auto-scroll chat to bottom when opening
+    if (isOpen && chatMessages) {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  });
+
+  // Close chat when tapping outside on mobile
+  document.addEventListener("click", (e) => {
+    if (window.innerWidth > 768) return;
+    if (!chatPanel.contains(e.target) && !chatToggleBtn.contains(e.target)) {
+      chatPanel.classList.remove("open");
+      chatToggleBtn.textContent = "💬";
+    }
+  });
+}

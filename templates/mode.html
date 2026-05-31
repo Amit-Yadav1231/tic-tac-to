@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Choose Mode — Tic Tac Toe</title>
+  <meta name="description" content="Choose your game mode: play against AI or challenge a friend in Tic Tac Toe.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- Background blobs -->
+  <div class="bg-circle c1"></div>
+  <div class="bg-circle c2"></div>
+  <div class="bg-circle c3"></div>
+
+  <!-- Mode Selection Card -->
+  <main class="card mode-card" id="mode-card">
+
+    <!-- Greeting -->
+    <div class="mode-greeting">
+      <span class="wave-emoji">👋</span>
+      <h1 class="title mode-title">
+        Welcome, <span class="accent">{{ player_name }}</span>!
+      </h1>
+      <p class="subtitle">Choose your game mode</p>
+    </div>
+
+    <!-- Mode Buttons -->
+    <div class="mode-buttons">
+      <a href="/game" class="mode-btn mode-btn-ai" id="btn-ai">
+        <div class="mode-btn-icon">🤖</div>
+        <div class="mode-btn-text">
+          <span class="mode-btn-title">Play with AI</span>
+          <span class="mode-btn-desc">Challenge the computer</span>
+        </div>
+        <span class="mode-btn-arrow">→</span>
+      </a>
+
+      <a href="/game" class="mode-btn mode-btn-friend" id="btn-friend">
+        <div class="mode-btn-icon">👥</div>
+        <div class="mode-btn-text">
+          <span class="mode-btn-title">Play with Friend</span>
+          <span class="mode-btn-desc">Local multiplayer</span>
+        </div>
+        <span class="mode-btn-arrow">→</span>
+      </a>
+    </div>
+
+    <!-- Back link -->
+    <a href="/" class="back-link" id="back-link">← Back to home</a>
+
+  </main>
+
+</body>
+</html>
